@@ -13,7 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   ###################################################
-  # Section 2 : Server Settings
+  # Section 2 : VM Server Configurations
   ###################################################
   # Web Server
   config.vm.define :webserver do |webserver|
@@ -35,4 +35,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     dbserver.vm.hostname = "dbserver.wordpressdevbase"
     dbserver.vm.network "private_network", ip: "192.168.33.20"
   end
+
+  ###################################################
+  # Section 3 : Provisioning
+  ###################################################
+  config.vm.provision :ansible_local do |ansible|
+    ansible.playbook = "provisioning/site.yml"
+    ansible.groups = {
+      "webservers" => ["webserver"],
+      "dbservers" => ["dbserver"]
+    }
+  end
+
 end
