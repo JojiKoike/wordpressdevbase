@@ -1,0 +1,65 @@
+---
+- name: Add Mysql Official Repository
+  become: yes
+  yum:
+    state: present
+    name: "{{ mysql_repo_rpm_url }}"
+
+- name: Install Mysql and necessary libraries
+  become: yes
+  yum:
+    enablerepo: mysql57-community
+    disablerepo: mysql80-community
+    name: "{{ item.name }}"
+    state: present
+  with_items:
+    - name: MySQL-python
+    - name: mysql-community-server
+
+- name: Start and Enable MySQL Service
+  become: yes
+  service:
+    name: mysqld
+    state: started
+    enabled: yes
+
+- name: Get Temporary root password
+  shell: cat /var/log/mysqld.log | grep password | awk {'print $NF'}
+  register: mysql_temporary_root_password
+
+- name: Test Login to Confirm Temporary root password changed
+  shell: mysqlshow -uroot -p'{{mysql_temporary_root_password.stdout}}'
+  register: temporary_root_password_changed
+  ignore_errors: True
+
+- name: Change Password Validation Way Easier
+  shell: |
+    mysql -u root -p'{{ mysql_temporary_root_password.stdout }}' --connect-expired-password -e "SET GLOBAL validate_password_length=8;"
+    mysql -u root -p'{{ mysql_temporary_root_password.stdout }}' --connect-expired-password -e "SET GLOBAL validate_password_policy=LOW;"
+  when: temporary_root_password_changed.stderr.find('denied') == -1
+
+- name: Change root password
+  shell: mysql --connect-expired-password -uroot -p'{{ mysql_temporary_root_password.stdout }}' -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ mysql_root_password }}';"
+  when: temporary_root_password_changed.stderr.find('denied') == -1
+
+- name: Copy my.cnf
+  template:
+    src: my.cnf.j2
+    dest: /home/vagrant/.my.cnf
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+
+- name: Create WordPress DB
+  mysql_db:
+    name: "{{ mysql_wordpress_db }}"
+    state: present
+    encoding: utf8mb4
+
+- name: Create WordPress DB User
+  mysql_user:
+    name: "{{ mysql_wordpress_user }}"
+    host: "{{ mysql_wordpress_user_host }}"
+    password: "{{ mysql_wordpress_password }}"
+    priv: '"{{ mysql_wordpress_db }}".*:ALL'
+    state: present
