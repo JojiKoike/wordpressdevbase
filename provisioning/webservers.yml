@@ -4,3 +4,4 @@
     - common
     - apache2
     - anyenv
+    - phpenv
