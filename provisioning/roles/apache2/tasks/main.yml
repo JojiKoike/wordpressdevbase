@@ -1,0 +1,41 @@
+---
+- name: Install ius repository for Install Latest Apache2
+  become: yes
+  yum:
+    name: "{{ ius_repository }}"
+    state: present
+
+- name: Disabled ius repository
+  become: yes
+  replace:
+    path: /etc/yum.repos.d/ius.repo
+    regexp: 'enabled *= *1'
+    replace: 'enabled=0'
+
+- name: Install HTTP/2 core engine
+  become: yes
+  yum:
+    enablerepo: epel
+    name: nghttp2
+    state: present
+
+- name: Install mime.types
+  become: yes
+  yum:
+    name: mailcap
+    state: present
+
+- name: Install Latest Apache2
+  become: yes
+  yum:
+    enablerepo: ius
+    disablerepo: base,extras,updates
+    name: httpd
+    state: present
+
+- name: Start And Eneble httpd
+  become: yes
+  service:
+    name: httpd
+    state: started
+    enabled: yes
