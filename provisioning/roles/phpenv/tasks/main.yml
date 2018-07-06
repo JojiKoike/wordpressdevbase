@@ -2,7 +2,7 @@
 - stat: path=/home/vagrant/.anyenv/envs/phpenv
   register: phpenvdir
 - name: Install phpenv
-  shell: "anyenv install phpenv"
+  shell: /bin/bash -lc "anyenv install phpenv"
   when: not phpenvdir.stat.exists
 
 - name: Reload .bash_profile
@@ -32,5 +32,8 @@
     - name: libxslt
     - name: libxslt-devel
 
-- name: Install PHP
-  shell: phpenv install {{ php_version }}
+- stat: path=/home/vagrant/.vagrant/envs/phpenv/versions/{{ php_version }}
+  register: phpdir
+- name: Install PHP and User Global Version
+  shell: /bin/bash -lc "phpenv install {{ php_version }} && phpenv global {{ php_version }}"
+  when: not phpdir.stat.exists
