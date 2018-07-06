@@ -1,0 +1,33 @@
+---
+- name: Install remi repository for Install PHP 7.x
+  become: yes
+  yum:
+    name: "{{ remi_repository }}"
+    state: present
+
+- name: Install PHP 7.1.x
+  become: yes
+  yum:
+    name: "{{ item.name }}"
+    state: present
+    enablerepo: remi-php71
+  with_items:
+    - name: php
+    - name: php-cli
+    - name: php-mbstring
+    - name: php-mcrypt
+    - name: php-mysql
+    - name: php-pear
+    - name: php-xsl
+    - name: php-curl
+    - name: php-intl
+    - name: php-xdebug
+
+- name: Configure php.ini
+  become: yes
+  replace:
+    path: /etc/php.ini
+    regexp: ';date.timezone ='
+    replace: 'date.timezone = "{{ timezone }}"'
+  notify:
+    - reload apache2
