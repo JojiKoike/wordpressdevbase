@@ -61,5 +61,5 @@
     name: "{{ mysql_wordpress_user }}"
     host: "{{ mysql_wordpress_user_host }}"
     password: "{{ mysql_wordpress_password }}"
-    priv: '"{{ mysql_wordpress_db }}".*:ALL'
+    priv: "{{ mysql_wordpress_db }}.*:ALL"
     state: present
