@@ -19,19 +19,27 @@
     name: nghttp2
     state: present
 
-- name: Install mime.types
+- name: Install Required packages
   become: yes
   yum:
-    name: mailcap
+    name: "{{ item.name }}"
     state: present
+  with_items:
+    - name: mailcap
+    - name: libdb-devel
+    - name: expat-devel
+    - name: openldap-devel
 
 - name: Install Latest Apache2
   become: yes
   yum:
     enablerepo: ius
     disablerepo: base,extras,updates
-    name: httpd
+    name: "{{ item.name }}"
     state: present
+  with_items:
+    - name: httpd
+    - name: httpd-devel
 
 - name: Start And Eneble httpd
   become: yes

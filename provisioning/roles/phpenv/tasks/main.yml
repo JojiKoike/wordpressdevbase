@@ -1,0 +1,39 @@
+---
+- stat: path=/home/vagrant/.anyenv/envs/phpenv
+  register: phpenvdir
+- name: Install phpenv
+  shell: /bin/bash -lc "anyenv install phpenv"
+  when: not phpenvdir.stat.exists
+
+- name: Reload .bash_profile
+  shell: "exec $SHELL -l"
+
+- name: Install Required Modules
+  become: yes
+  yum:
+    name: "{{ item.name }}"
+    state: present
+  with_items:
+    - name: libxml2
+    - name: libxml2-devel
+    - name: libcurl
+    - name: libcurl-devel
+    - name: re2c
+    - name: libjpeg
+    - name: libjpeg-devel
+    - name: libpng
+    - name: libpng-devel
+    - name: libmcrypt
+    - name: libmcrypt-devel
+    - name: libicu
+    - name: libicu-devel
+    - name: libtidy
+    - name: libtidy-devel
+    - name: libxslt
+    - name: libxslt-devel
+
+- stat: path=/home/vagrant/.vagrant/envs/phpenv/versions/{{ php_version }}
+  register: phpdir
+- name: Install PHP and User Global Version
+  shell: /bin/bash -lc "phpenv install {{ php_version }} && phpenv global {{ php_version }}"
+  when: not phpdir.stat.exists

@@ -1,18 +1,18 @@
 ---
-- stat: path=/home/vagrant/.anyenv
-  register: anyenvdir
-- name: Install Anyenv
+- name: Install anyenv
   git:
     repo: https://github.com/riywo/anyenv
     dest: /home/vagrant/.anyenv
-  when: not anyenvdir.stat.exists
 
-- name: Add Anyenv Settings into .bash_profile
-  blockinfile:
-    path: /home/vagrant/.bash_profile
-    block: |
-      export PATH="$HOME/.anyenv/bin:$PATH"
-      eval "$(anyenv init -)"
+- name: Add ~/.anyenv/bin to PATH
+  lineinfile:
+    dest: "/home/vagrant/.bashrc"
+    line: "export PATH=$HOME/.anyenv/bin:$PATH"
 
-- name: Reload .bash_profile
-  shell: exec $SHELL -l
+- name: Eval anyenv init in ~/.bashrc
+  lineinfile:
+    dest: "/home/vagrant/.bashrc"
+    line: 'eval "$(anyenv init -)"'
+
+- name: Reload ~/.bashrc
+  shell: "exec $SHELL -l"
