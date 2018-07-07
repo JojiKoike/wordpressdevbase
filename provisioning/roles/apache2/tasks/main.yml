@@ -47,3 +47,10 @@
     name: httpd
     state: started
     enabled: yes
+
+- name: Configure httpd.conf
+  become: yes
+  template:
+    src: httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+  notify: restart apache2
