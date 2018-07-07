@@ -30,4 +30,4 @@
     regexp: ';date.timezone ='
     replace: 'date.timezone = "{{ timezone }}"'
   notify:
-    - reload apache2
+    - restart apache2
