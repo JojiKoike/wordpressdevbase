@@ -15,11 +15,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ###################################################
   # Section 2 : VM Server Configurations
   ###################################################
+  # DB Server
+  config.vm.define :dbserver do |dbserver|
+    dbserver.vm.box = "bento/centos-7.5"
+    dbserver.vm.hostname = "dbserver.wordpressdevbase"
+    dbserver.vm.network "private_network", ip: "192.168.33.10"
+  end
+
   # Web Server
   config.vm.define :webserver do |webserver|
     webserver.vm.box = "bento/centos-7.5"
     webserver.vm.hostname = "webserver.wordpressdevbase"
-    webserver.vm.network "private_network", ip: "192.168.33.10"
+    webserver.vm.network "private_network", ip: "192.168.33.20"
     webserver.vm.synced_folder "./app",
                               "/var/www/app",
                               id: 'vagrant-root',
@@ -29,21 +36,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                               mount_options: ['dmode=777', 'fmode=777']
   end
 
-  # DB Server
-  config.vm.define :dbserver do |dbserver|
-    dbserver.vm.box = "bento/centos-7.5"
-    dbserver.vm.hostname = "dbserver.wordpressdevbase"
-    dbserver.vm.network "private_network", ip: "192.168.33.20"
-  end
-
   ###################################################
   # Section 3 : Provisioning
   ###################################################
   config.vm.provision :ansible_local do |ansible|
     ansible.playbook = "provisioning/site.yml"
     ansible.groups = {
-      "webservers" => ["webserver"],
-      "dbservers" => ["dbserver"]
+      "dbservers" => ["dbserver"],
+      "webservers" => ["webserver"]
     }
   end
 

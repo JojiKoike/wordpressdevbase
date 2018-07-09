@@ -2,6 +2,6 @@
 mysql_repo_rpm_url: https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
 mysql_root_password: 2aj6Y%7EjGMp
 mysql_wordpress_user: wordpress
-mysql_wordpress_user_host: 192.168.33.10
+mysql_wordpress_user_host: 192.168.33.20
 mysql_wordpress_password: password
 mysql_wordpress_db: wordpress

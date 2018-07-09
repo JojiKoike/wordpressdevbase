@@ -1,93 +1,76 @@
 <?php
 /**
- * WordPress の基本設定
+ * The base configuration for WordPress
  *
- * このファイルは、インストール時に wp-config.php 作成ウィザードが利用します。
- * ウィザードを介さずにこのファイルを "wp-config.php" という名前でコピーして
- * 直接編集して値を入力してもかまいません。
+ * The wp-config.php creation script uses this file during the
+ * installation. You don't have to use the web site, you can
+ * copy this file to "wp-config.php" and fill in the values.
  *
- * このファイルは、以下の設定を含みます。
+ * This file contains the following configurations:
  *
- * * MySQL 設定
- * * 秘密鍵
- * * データベーステーブル接頭辞
+ * * MySQL settings
+ * * Secret keys
+ * * Database table prefix
  * * ABSPATH
  *
- * @link http://wpdocs.osdn.jp/wp-config.php_%E3%81%AE%E7%B7%A8%E9%9B%86
+ * @link https://codex.wordpress.org/Editing_wp-config.php
  *
  * @package WordPress
  */
 
-// 注意:
-// Windows の "メモ帳" でこのファイルを編集しないでください !
-// 問題なく使えるテキストエディタ
-// (http://wpdocs.osdn.jp/%E7%94%A8%E8%AA%9E%E9%9B%86#.E3.83.86.E3.82.AD.E3.82.B9.E3.83.88.E3.82.A8.E3.83.87.E3.82.A3.E3.82.BF 参照)
-// を使用し、必ず UTF-8 の BOM なし (UTF-8N) で保存してください。
+// ** MySQL settings ** //
+/** The name of the database for WordPress */
+define( 'DB_NAME', 'wordpress' );
 
-// ** MySQL 設定 - この情報はホスティング先から入手してください。 ** //
-/** WordPress のためのデータベース名 */
-define('DB_NAME', 'wordpress');
+/** MySQL database username */
+define( 'DB_USER', 'wordpress' );
 
-/** MySQL データベースのユーザー名 */
-define('DB_USER', 'wordpress');
+/** MySQL database password */
+define( 'DB_PASSWORD', 'password' );
 
-/** MySQL データベースのパスワード */
-define('DB_PASSWORD', 'password');
+/** MySQL hostname */
+define( 'DB_HOST', '192.168.33.10' );
 
-/** MySQL のホスト名 */
-define('DB_HOST', '192.168.33.20');
+/** Database Charset to use in creating database tables. */
+define( 'DB_CHARSET', 'utf8' );
 
-/** データベースのテーブルを作成する際のデータベースの文字セット */
-define('DB_CHARSET', 'utf8');
+/** The Database Collate type. Don't change this if in doubt. */
+define( 'DB_COLLATE', '' );
 
-/** データベースの照合順序 (ほとんどの場合変更する必要はありません) */
-define('DB_COLLATE', '');
-
-/**#@+
- * 認証用ユニークキー
+/**
+ * Authentication Unique Keys and Salts.
  *
- * それぞれを異なるユニーク (一意) な文字列に変更してください。
- * {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org の秘密鍵サービス} で自動生成することもできます。
- * 後でいつでも変更して、既存のすべての cookie を無効にできます。これにより、すべてのユーザーを強制的に再ログインさせることになります。
+ * Change these to different unique phrases!
+ * You can generate these using the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}
+ * You can change these at any point in time to invalidate all existing cookies. This will force all users to have to log in again.
  *
  * @since 2.6.0
  */
- define('AUTH_KEY',         ';_7Y}(66y9::;kXj/iX97TB4T;j|R/#p+IH}.<n_HwlZ;9onbFU6?;C._zXcoU<S');
- define('SECURE_AUTH_KEY',  'pneq+w9YJM?#:6W7=kOCcTDF,,6fU/[_)E1K12N|&=+p&T=LCKH2>#`F}{sQg9U%');
- define('LOGGED_IN_KEY',    'fSP;4Cg0) SOG^#la]VE`$cu`krT|nG0e6iuW[qjvL8l|BV/Nm6UK^>>@Uf[94-Y');
- define('NONCE_KEY',        'gnTNKt{Pc`0N HGBWAPpoEbD8:n%T9Z*sgm5,P]7?`X3ygx(VNfq7jCby/Ce}+HR');
- define('AUTH_SALT',        '29!^>6swsCL;8e=1|,I?D]wYz2&+W=TcLq]aK$3MpT<a=G_`.*-h+5GL?.lC+-|:');
- define('SECURE_AUTH_SALT', '5wUa91],0@M8v`e*X^5+nT<1i+zq?Us=qC]xA?cLE8;`4NmA++zNaW5x6fc-ADak');
- define('LOGGED_IN_SALT',   'U_S?TC3d0V0zDQKFMrQ_yuoyB9[3L(8H1ql{0Vm@BxJU)R:806LGlCFJo,mNCS<x');
- define('NONCE_SALT',       '`R7Ab>egYn:,+W}ehzCDV~oG?] -8{C%Mm~QO-n-.a@Q|6U%_ :(XBR/|g&%Mg?w');
-
-/**#@-*/
+define( 'AUTH_KEY',         'A@j} .<yifeA@gwqo#$.8D:!]%;?u|D>N([;E&e&4^4wgoV%mSLPPJNoaEY3.Z{;' );
+define( 'SECURE_AUTH_KEY',  '_;4`B;d;@=EE/(`,_bp7!hnmyP]gqK4JxAl!pkoU%v<tLpRDG`i|Zi1`jG}aQTG(' );
+define( 'LOGGED_IN_KEY',    'Y7%?`DL1.7=@){pn>:WDrhY V|.)x<,Wnub8YZPc+dTltYNP:P9wo6]A:Xj1P^Qa' );
+define( 'NONCE_KEY',        '|WB+(7~=_F#fmcV!kLzfW>v[8Vb7Oiq[v%[DhOKwy9(3nrqpde1Z|wccvF>>Xgb1' );
+define( 'AUTH_SALT',        '~Z6@JhpIq59/H8p&!|Ao{1;feY-=c!u45gI^C{M/l:UcLYcaiir&1Le)tHY(|Keo' );
+define( 'SECURE_AUTH_SALT', 'a-Njy4uY<YD/NrHH[01a{uc?A<^O2n?[W7]Zp~)*oz4$hE2dOyzPh>}NbYg,K9vg' );
+define( 'LOGGED_IN_SALT',   'x(oblWFPb)eU>n/#`z7}9O6{nX?ZoU5(SU=42J&|`uG>c%l|Zbflwd8*6Q^5K>@w' );
+define( 'NONCE_SALT',       'S2_Cp?EPvg`{y~Qr!`|>m0!iMUMihwfO93Yl*4snaQci,3P_K2~bm!CfNj;aK7+R' );
 
 /**
- * WordPress データベーステーブルの接頭辞
+ * WordPress Database Table prefix.
  *
- * それぞれにユニーク (一意) な接頭辞を与えることで一つのデータベースに複数の WordPress を
- * インストールすることができます。半角英数字と下線のみを使用してください。
+ * You can have multiple installations in one database if you give each
+ * a unique prefix. Only numbers, letters, and underscores please!
  */
-$table_prefix  = 'wp_';
+$table_prefix = 'wp_';
 
-/**
- * 開発者へ: WordPress デバッグモード
- *
- * この値を true にすると、開発中に注意 (notice) を表示します。
- * テーマおよびプラグインの開発者には、その開発環境においてこの WP_DEBUG を使用することを強く推奨します。
- *
- * その他のデバッグに利用できる定数については Codex をご覧ください。
- *
- * @link http://wpdocs.osdn.jp/WordPress%E3%81%A7%E3%81%AE%E3%83%87%E3%83%90%E3%83%83%E3%82%B0
- */
-define('WP_DEBUG', true);
 
-/* 編集が必要なのはここまでです ! WordPress でブログをお楽しみください。 */
+
+
+/* That's all, stop editing! Happy blogging. */
 
 /** Absolute path to the WordPress directory. */
-if ( !defined('ABSPATH') )
-	define('ABSPATH', dirname(__FILE__) . '/');
+if ( ! defined( 'ABSPATH' ) )
+	define( 'ABSPATH', dirname( __FILE__ ) . '/' );
 
 /** Sets up WordPress vars and included files. */
-require_once(ABSPATH . 'wp-settings.php');
+require_once ABSPATH . 'wp-settings.php';

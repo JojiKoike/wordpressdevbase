@@ -40,6 +40,7 @@
   with_items:
     - name: httpd
     - name: httpd-devel
+    - name: mod_ssl
 
 - name: Start And Eneble httpd
   become: yes
@@ -53,4 +54,39 @@
   template:
     src: httpd.conf.j2
     dest: /etc/httpd/conf/httpd.conf
+  notify: restart apache2
+
+- name: Configure ssl.conf
+  become: yes
+  template:
+    src: ssl.conf.j2
+    dest: /etc/httpd/conf.d/ssl.conf
+  notify: restart apache2
+
+- name: Create Server Certificate Files Directory
+  become: yes
+  file:
+    path: /etc/httpd/conf/ssl.crt
+    state: directory
+    mode: 0755
+
+- name: Copy Server Certificate
+  become: yes
+  copy:
+    src: server.crt
+    dest: /etc/httpd/conf/ssl.crt/server.crt
+  notify: restart apache2
+
+- name: Create Server Secret Key Files Directory
+  become: yes
+  file:
+    path: /etc/httpd/conf/ssl.key
+    state: directory
+    mode: 0755
+
+- name: Copy Server Secret Key
+  become: yes
+  copy:
+    src: server.key
+    dest: /etc/httpd/conf/ssl.key/server.key
   notify: restart apache2
