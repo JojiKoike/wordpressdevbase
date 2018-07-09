@@ -1,0 +1,14 @@
+---
+- name: Add Mysql Official Repository
+  become: yes
+  yum:
+    state: present
+    name: "{{ mysql_repo_rpm_url }}"
+
+- name: Install Mysql and necessary libraries
+  become: yes
+  yum:
+    enablerepo: mysql57-community
+    disablerepo: mysql80-community
+    name: mysql
+    state: present
