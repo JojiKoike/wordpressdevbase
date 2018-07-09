@@ -1,2 +1,26 @@
 ---
-# tasks file for wordpress
+- name: Download wp-cli
+  become: yes
+  get_url:
+    url: "{{ wp_cli_url }}"
+    dest: /usr/local/bin/wp
+    mode: 0755
+
+- stat: path={{wp_install_path}}
+  register: wp_install_dir
+- name: Download WordPress Core
+  shell: wp core download --locale={{wp_locale}} --path={{wp_install_path}}
+  when: not wp_install_dir.stat.exists
+
+- name: Check if WordPress is installed
+  shell: wp core is-installed --path={{wp_install_path}}
+  register: IS_INSTALLED
+  ignore_errors: yes
+
+- name: Create wp-config.php file
+  shell: wp config create --path={{wp_install_path}} --dbhost={{wp_db_host}} --dbname={{wp_db_name}} --dbuser={{wp_db_user}} --dbpass={{wp_db_password}}
+  when: IS_INSTALLED.rc == 1
+
+- name: Install WordPress
+  shell: wp core install --path={{wp_install_path}} --url={{wp_url}} --title={{wp_title}} --admin_user={{wp_admin_user}} --admin_password={{wp_admin_password}} --admin_email={{wp_admin_email}}
+  when: IS_INSTALLED.rc == 1
