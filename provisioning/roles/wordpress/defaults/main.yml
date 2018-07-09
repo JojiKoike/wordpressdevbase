@@ -1,12 +1,12 @@
 ---
 wp_cli_url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 wp_locale: ja
-wp_install_path: /var/www/app
+wp_install_path: /var/www/app/wordpress
 wp_db_host: 192.168.33.10
 wp_db_name: wordpress
 wp_db_user: wordpress
 wp_db_password: password
-wp_url: webserver.wordpressdevbase
+wp_url: webserver.wordpressdevbase/wordpress
 wp_title: Title
 wp_admin_user: AdminUser
 wp_admin_password: password
