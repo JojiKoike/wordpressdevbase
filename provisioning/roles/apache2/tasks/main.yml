@@ -1,0 +1,92 @@
+---
+- name: Install ius repository for Install Latest Apache2
+  become: yes
+  yum:
+    name: "{{ ius_repository }}"
+    state: present
+
+- name: Disabled ius repository
+  become: yes
+  replace:
+    path: /etc/yum.repos.d/ius.repo
+    regexp: 'enabled *= *1'
+    replace: 'enabled=0'
+
+- name: Install HTTP/2 core engine
+  become: yes
+  yum:
+    enablerepo: epel
+    name: nghttp2
+    state: present
+
+- name: Install Required packages
+  become: yes
+  yum:
+    name: "{{ item.name }}"
+    state: present
+  with_items:
+    - name: mailcap
+    - name: libdb-devel
+    - name: expat-devel
+    - name: openldap-devel
+
+- name: Install Latest Apache2
+  become: yes
+  yum:
+    enablerepo: ius
+    disablerepo: base,extras,updates
+    name: "{{ item.name }}"
+    state: present
+  with_items:
+    - name: httpd
+    - name: httpd-devel
+    - name: mod_ssl
+
+- name: Start And Eneble httpd
+  become: yes
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+
+- name: Configure httpd.conf
+  become: yes
+  template:
+    src: httpd.conf.j2
+    dest: /etc/httpd/conf/httpd.conf
+  notify: restart apache2
+
+- name: Configure ssl.conf
+  become: yes
+  template:
+    src: ssl.conf.j2
+    dest: /etc/httpd/conf.d/ssl.conf
+  notify: restart apache2
+
+- name: Create Server Certificate Files Directory
+  become: yes
+  file:
+    path: /etc/httpd/conf/ssl.crt
+    state: directory
+    mode: 0755
+
+- name: Copy Server Certificate
+  become: yes
+  copy:
+    src: server.crt
+    dest: /etc/httpd/conf/ssl.crt/server.crt
+  notify: restart apache2
+
+- name: Create Server Secret Key Files Directory
+  become: yes
+  file:
+    path: /etc/httpd/conf/ssl.key
+    state: directory
+    mode: 0755
+
+- name: Copy Server Secret Key
+  become: yes
+  copy:
+    src: server.key
+    dest: /etc/httpd/conf/ssl.key/server.key
+  notify: restart apache2
