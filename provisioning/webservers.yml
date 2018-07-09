@@ -4,3 +4,5 @@
     - common
     - apache2
     - php
+    - mysql_client
+    - wordpress
