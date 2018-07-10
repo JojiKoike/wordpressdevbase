@@ -18,15 +18,15 @@ $ vagrant up
 
 * Access Administration Console
 
-  URL: https://webserver.wordpressdevbase/wp-admin
+  URL: https://webserver.wordpressdevbase/wordpress/wp-admin
 
   ID: AdminUser
 
-  Password:Password
+  Password: password
 
 * Access TopPage
 
-  URL : https://webserver.wordpressdevbaase
+  URL : https://webserver.wordpressdevbase/wordpress
 
 ## Author
 
